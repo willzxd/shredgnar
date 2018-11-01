@@ -9,5 +9,5 @@ exports.shredGnarSchema = new GraphQLSchema({
     name: 'Mutation',
     fields: mutation
   })
-})
+});
 
