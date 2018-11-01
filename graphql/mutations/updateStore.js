@@ -37,5 +37,5 @@ exports.updateStore = {
     )
       .catch(err => new Error(err));
   }
-}
+};
 

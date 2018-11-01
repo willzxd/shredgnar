@@ -3,9 +3,13 @@ var GraphQLNonNull = require('graphql').GraphQLNonNull;
 var GraphQLID = require('graphql').GraphQLID;
 var GraphQLString = require('graphql').GraphQLString;
 
-// Store Type
-exports.storeType = new GraphQLObjectType({
-  name: 'store',
+/**
+ * itemCategory Type
+ * This type stores the primary key, the name of a item category,
+ * and its description
+ */
+exports.itemCategoryType = new GraphQLObjectType({
+  name: 'itemCategory',
   fields: function () {
     return {
       id: {
@@ -14,23 +18,9 @@ exports.storeType = new GraphQLObjectType({
       name: {
         type: new GraphQLNonNull(GraphQLString)
       },
-      phoneNumber: {
+      description: {
         type: GraphQLString
-      },
-      address: {
-        type: GraphQLString
-      },
-      email: {
-        type: GraphQLString
-      },
-      website: {
-        type: GraphQLString
-      },
-      reseravationLink: {
-        type: GraphQLString
-      },
-      // TODO: add operationHours
-      // TODO: add score of google review and score of yelp review
+      }
     };
   }
 });

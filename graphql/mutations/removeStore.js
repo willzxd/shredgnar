@@ -15,6 +15,6 @@ exports.removeStore = {
     if (!removedStore) {
       throw new Error('Error');
     }
-    return removedstore;
+    return removedStore;
   }
-}
+};
