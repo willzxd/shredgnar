@@ -1,7 +1,7 @@
-const express = require("express");
+const express = require('express');
 const mongoose = require('./config/mongoose');
-const graphqlHTTP = require("express-graphql");
-const cors = require("cors");
+const graphqlHTTP = require('express-graphql');
+const cors = require('cors');
 const db = mongoose();
 const app = express();
 
