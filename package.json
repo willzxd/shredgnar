@@ -4,7 +4,8 @@
   "description": "shredgnar",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node_modules/.bin/nodemon server.js"
   },
   "keywords": [
     "ski",
@@ -21,6 +22,7 @@
     "mongoose": "^5.3.7"
   },
   "devDependencies": {
-    "eslint": "^5.8.0"
+    "eslint": "^5.8.0",
+    "nodemon": "^1.18.6"
   }
 }

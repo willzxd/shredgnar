@@ -1,11 +1,14 @@
-var GraphQLObjectType = require('graphql').GraphQLObjectType;
-var GraphQLNonNull = require('graphql').GraphQLNonNull;
-var GraphQLID = require('graphql').GraphQLID;
-var GraphQLList = require('graphql').GraphQLList;
-var GraphQLString = require('graphql').GraphQLString;
-var GraphQLInt = require('graphql').GraphQLInt;
+const {
+  GraphQLObjectType,
+  GraphQLNonNull,
+  GraphQLID,
+  GraphQLList,
+  GraphQLString,
+  GraphQLInt
+} = require('graphql');
+const {priceType} = require('./price');
 
-// Store Type
+// product Type
 exports.productType = new GraphQLObjectType({
   name: 'product',
   fields: function () {
@@ -36,7 +39,7 @@ exports.productType = new GraphQLObjectType({
       },
       // TODO: add relations of coupons, discount, Fees, upgrade, and downgrade
       prices: {
-        type: new GraphQLList(new GraphQLList(GraphQLInt))
+        type: new GraphQLList(priceType)
       },
       // record how many days have a free day
       nDayFree: {
