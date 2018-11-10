@@ -6,7 +6,7 @@
 
 
 //each each product category id, find corresponding results in each store
-//shall we use unwind???
+//shall we use unwind!??
 for (i in length(products)){
     db.StoreProducts.aggregate([
         { 
