@@ -1,13 +1,20 @@
-var GraphQLObjectType = require('graphql').GraphQLObjectType;
-var GraphQLList = require('graphql').GraphQLList;
-var StoreModel = require('../../models/store');
-var storeType = require('../types/store').storeType;
-var ProductCategoryModel = require('../../models/productCategory');
-var productCategoryType = require('../types/productCategory').productCategoryType;
-var ItemCategoryModel = require('../../models/itemCategory');
-var itemCategoryType = require('../types/itemCategory').itemCategoryType;
-var ItemModel = require('../../models/item');
-var itemType = require('../types/item').itemType;
+const {
+  GraphQLObjectType,
+  GraphQLList
+} = require('graphql');
+const {each, some, find, map} = require('lodash');
+
+const ItemModel = require('../../models/item');
+const ItemCategoryModel = require('../../models/itemCategory');
+const ProductCategoryModel = require('../../models/productCategory');
+const StoreModel = require('../../models/store');
+const ProductModel = require('../../models/product');
+
+const {itemCategoryType} = require('../types/itemCategory');
+const {itemType} = require('../types/item');
+const {productCategoryType} = require('../types/productCategory');
+const {productInputType} = require('../types/productInput');
+const {storeType} = require('../types/store');
 
 // Query
 exports.queryType = new GraphQLObjectType({
@@ -51,6 +58,42 @@ exports.queryType = new GraphQLObjectType({
           throw new Error('getAllItemCategoryies Error');
         }
         return items;
+      }
+    },
+    searchStores: {
+      type: new GraphQLList(storeType),
+      args: {
+        userInputedProducts: {
+          type: new GraphQLList(productInputType)
+        }
+      },
+      resolve(parent, args) {
+        const storeMatchAtLeastOne =[];
+        each(args.userInputedProducts, (inputProduct) => {
+          ProductModel.distinct('storeId', 
+            { productCategoryId: inputProduct.productCategoryId, 
+              ageGroup: inputProduct.ageGroup,
+              skilllevel: inputProduct.skillLevel
+            },
+            function(err, results) {
+              if (err) {
+                throw new Error('Fail to find products based on user input', args.userInputedProducts);
+              }
+              storeMatchAtLeastOne.push(results);
+            }
+          );
+          const resultStoreIds = [];
+          if(storeMatchAtLeastOne.length) {
+            each(storeMatchAtLeastOne[0], (storeId) => {              
+              if (!some(storeMatchAtLeastOne, (storeIdList) => !find(storeIdList, storeId))) {
+                resultStoreIds.push(storeId);
+              }
+            });
+          }
+          return map(resultStoreIds, (storeId) => {
+            return StoreModel.findById(storeId).exec();
+          });
+        });
       }
     }
   }

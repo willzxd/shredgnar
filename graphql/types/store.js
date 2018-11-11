@@ -44,7 +44,7 @@ exports.storeType = new GraphQLObjectType({
             productCategoryId: '201',
             items: ['301', '302'],
             productName: 'product 1 on store 1',
-            price: [[3, 1],[4, 3]]
+            prices: [[3, 1],[4, 3]]
           },
           {
             id: '2',
@@ -52,7 +52,7 @@ exports.storeType = new GraphQLObjectType({
             productCategoryId: '202',
             items: ['301', '302'],
             productName: 'product 2 on store 1',
-            price: [[3, 2],[5, 4]]
+            prices: [[3, 2],[5, 4]]
           }
         ];
       }

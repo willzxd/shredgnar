@@ -7,35 +7,45 @@
 
 //each each product category id, find corresponding results in each store
 //shall we use unwind?!!
-for (i in length(products)){
-    db.StoreProducts.aggregate([
-        { 
-            $match:
-            {
-              productCategoryId: products[i].productCategoryId,
-              ageGroup: products[i].ageGroup,
-              skilllevel: products[i].skilllevel
-            }
-        },
-        { 
-            $project:
-            {
-              storeId: 1,
-              productCategoryId: 1,
-              prices: 1,
-              nDayFree: 1,
-              fees: 1,
-              _id: 0
-            }
-        },
-        { 
-            $out:
-            {
-              $concat: [ "searchResult", i ]
-            }
-        }
-    ])
-};
+
+var storeMatchAtLeastOne = [];
+
+for (var p in userInputedProducts){
+  Products.distinct('storeId', 
+    { productCategoryId: p.productCategoryId, 
+      ageGroup: p.ageGroup,
+      skilllevel: p.skilllevel
+    },
+    function(err, results) {
+      storeMatchAtLeastOne.push(results);
+    }
+  ); 
+}
+
+var storeCheckList = [];
+
+storeMatchAtLeastOne.forEach(function(sL) {
+  sL.forEach(function(s) {
+    if (storeCheckList.includes(s)){
+      storeCheckList.push(s);
+    }
+  });
+});
+
+
+var storeMatchAll = storeCheckList;
+
+storeCheckList.forEach(function(s){
+  storeMatchAtLeastOne.forEach(function(sL){
+    if (sL.includes(s) == false){
+      var index = storeMatchAll.indexOf(s);
+      if(index != -1){
+        storeMatchAll.splice(index, 1);
+      }
+    }  
+  });
+});
+
 
 //return the stores that have all the search results
 for (i in length(products)){
