@@ -12,12 +12,10 @@ var productSchema = new Schema({
     required: true
   },
   items: {
-    type: [Number],
-    required: true
+    type: [{type: ObjectId, ref: 'item'}],
   },
   productName: {
     type: String,
-    required: true
   },
   ageGroup: {
     type: String

@@ -18,7 +18,7 @@ exports.itemType = new GraphQLObjectType({
       itemCategoryId: {
         type: new GraphQLNonNull(GraphQLID)
       },
-      level: {
+      skillLevel: {
         type: GraphQLInt
       }
     };

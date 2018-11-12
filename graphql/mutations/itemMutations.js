@@ -14,7 +14,7 @@ exports.addItem = {
     itemCategoryId: {
       type: new GraphQLNonNull(GraphQLID)
     },
-    level: {
+    skillLevel: {
       type: GraphQLInt
     }
   },
@@ -57,7 +57,7 @@ exports.updateItem = {
     itemCategoryId: {
       type: new GraphQLNonNull(GraphQLID)
     },
-    level: {
+    skillLevel: {
       type: GraphQLInt
     }
   },

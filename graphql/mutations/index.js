@@ -1,15 +1,8 @@
-var addStore = require('./storeMutations').addStore;
-var removeStore = require('./storeMutations').removeStore;
-var updateStore = require('./storeMutations').updateStore;
-var addProductCategory = require('./productCategoryMutations').addProductCategory;
-var removeProductCategory = require('./productCategoryMutations').removeProductCategory;
-var updateProductCategory = require('./productCategoryMutations').updateProductCategory; 
-var addItemCategory = require('./itemCategoryMutations').addItemCategory;
-var removeItemCategory = require('./itemCategoryMutations').removeItemCategory;
-var updateItemCategory = require('./itemCategoryMutations').updateItemCategory; 
-var addItem = require('./itemMutations').addItem;
-var removeItem = require('./itemMutations').removeItem;
-var updateItem = require('./itemMutations').updateItem; 
+const {addStore, removeStore, updateStore} = require('./storeMutations');
+const {addProductCategory, removeProductCategory, updateProductCategory} = require('./productCategoryMutations');
+const {addItemCategory, removeItemCategory, updateItemCategory} = require('./itemCategoryMutations');
+const {addItem, removeItem, updateItem} = require('./itemMutations');
+const {addProduct, removeProduct, updateProduct} = require('./productMutations');
 
 module.exports = {
   addStore,
@@ -23,5 +16,8 @@ module.exports = {
   updateItemCategory,
   addItem,
   removeItem,
-  updateItem
+  updateItem,
+  addProduct,
+  removeProduct,
+  updateProduct
 };

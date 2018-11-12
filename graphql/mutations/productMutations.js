@@ -77,10 +77,10 @@ exports.updateProduct = {
       type: new GraphQLNonNull(GraphQLID)
     },
     storeId: {
-      type: new GraphQLNonNull(GraphQLID)
+      type: GraphQLID
     },
     productCategoryId: {
-      type: new GraphQLNonNull(GraphQLID)
+      type: GraphQLID
     },
     items: {
       type: new GraphQLList(GraphQLID)
@@ -112,10 +112,17 @@ exports.updateProduct = {
   resolve(root, params) {
     return ProductModel.findByIdAndUpdate(
       params.id,
-      { $set: { name: params.name } },
-      { new: true }
-    )
-      .catch(err => new Error(err));
+      {
+        $set: params
+      },
+      {new: true},
+      (err, result) => {
+        if (err) {
+          return new Error(err);
+        }
+        console.log(result);
+      }
+    );
   }
 };
 

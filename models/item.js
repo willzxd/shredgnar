@@ -11,7 +11,7 @@ var itemSchema = new Schema({
     type: ObjectId,
     required: true
   },
-  level: {
+  skillLevel: {
     type: Number
   }
   

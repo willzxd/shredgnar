@@ -3,6 +3,7 @@ const {
   GraphQLList
 } = require('graphql');
 const {each, some, find, map} = require('lodash');
+const Promise = require('bluebird');
 
 const ItemModel = require('../../models/item');
 const ItemCategoryModel = require('../../models/itemCategory');
@@ -12,6 +13,7 @@ const ProductModel = require('../../models/product');
 
 const {itemCategoryType} = require('../types/itemCategory');
 const {itemType} = require('../types/item');
+const {productType} = require('../types/product');
 const {productCategoryType} = require('../types/productCategory');
 const {productInputType} = require('../types/productInput');
 const {storeType} = require('../types/store');
@@ -60,6 +62,17 @@ exports.queryType = new GraphQLObjectType({
         return items;
       }
     },
+    getAllProducts: {
+      type: new GraphQLList(productType),
+      resolve: function () {
+        const products = ProductModel.find().exec();
+        if (!products) {
+          throw new Error('getAllItemCategoryies Error');
+        }
+        return products;
+      }
+    },
+
     searchStores: {
       type: new GraphQLList(storeType),
       args: {
@@ -68,32 +81,32 @@ exports.queryType = new GraphQLObjectType({
         }
       },
       resolve(parent, args) {
-        const storeMatchAtLeastOne =[];
-        each(args.userInputedProducts, (inputProduct) => {
-          ProductModel.distinct('storeId', 
-            { productCategoryId: inputProduct.productCategoryId, 
-              ageGroup: inputProduct.ageGroup,
-              skilllevel: inputProduct.skillLevel
-            },
-            function(err, results) {
-              if (err) {
-                throw new Error('Fail to find products based on user input', args.userInputedProducts);
+        return Promise.all(
+          map(args.userInputedProducts, (inputProduct) =>
+            ProductModel.distinct(
+              'storeId',
+              { productCategoryId: inputProduct.productCategoryId,
+                ageGroup: inputProduct.ageGroup,
+                skillLevel: inputProduct.skillLevel
               }
-              storeMatchAtLeastOne.push(results);
+            ).exec()
+          )
+        )
+          .then((results) => {
+            console.log(results);
+            const resultStoreIds = [];
+            if(results.length) {
+              each(results[0], (storeId) => {
+                if (!some(results, (storeIdList) => !find(storeIdList, (id) => id.equals(storeId)))) {
+                  resultStoreIds.push(storeId);
+                }
+              });
             }
-          );
-          const resultStoreIds = [];
-          if(storeMatchAtLeastOne.length) {
-            each(storeMatchAtLeastOne[0], (storeId) => {              
-              if (!some(storeMatchAtLeastOne, (storeIdList) => !find(storeIdList, storeId))) {
-                resultStoreIds.push(storeId);
-              }
-            });
-          }
-          return map(resultStoreIds, (storeId) => {
-            return StoreModel.findById(storeId).exec();
+            return Promise.all(map(resultStoreIds, (storeId) => 
+              StoreModel.findById(storeId).exec()
+            ));
           });
-        });
+
       }
     }
   }
