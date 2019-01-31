@@ -55,7 +55,7 @@ exports.removeStore = {
 exports.updateStore = {
   type: storeType,
   args: {
-    id: {
+    id: { 
       name: 'id',
       type: new GraphQLNonNull(GraphQLString)
     },

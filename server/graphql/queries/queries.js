@@ -106,7 +106,6 @@ exports.queryType = new GraphQLObjectType({
               StoreModel.findById(storeId).exec()
             ));
           });
-
       }
     }
   }
